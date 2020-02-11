@@ -72,7 +72,23 @@
             slides[slideIndex-1].style.display = "block";
             dots[slideIndex-1].className += " active";
 
-            var slide_div = slides[slideIndex-1];
+
+            var data = {};
+            data.id = socket.id;
+            data.num = n;
+            socket.emit('move-slide', data);
+        }
+
+        var clickX = new Array();
+        var clickY = new Array();
+        var clickDrag = new Array();
+        var paint;
+        var context;
+        
+        prepareCanvas();
+        function prepareCanvas()
+        {
+            var slide_div = document.getElementsByClassName('slideshow-container')[0];
 
             var canvasWidth = slide_div.offsetWidth;
             var canvasHeight = slide_div.offsetHeight;
@@ -86,18 +102,10 @@
             if(typeof G_vmlCanvasManager != 'undefined') {
                 canvas = G_vmlCanvasManager.initElement(canvas);
             }
-            context = canvas.getContext("2d");
 
-            var data = {};
-            data.id = socket.id;
-            data.num = n;
-            socket.emit('move-slide', data);
+            context = canvas.getContext("2d");            
         }
 
-        var clickX = new Array();
-        var clickY = new Array();
-        var clickDrag = new Array();
-        var paint;
 
         function addClick(x, y, dragging)
         {
@@ -150,10 +158,6 @@
             }
         }
 
-        function prepareCanvas()
-        {
-            var canvasDiv = document.getElementsByClassName('slideshow-container');
-        }
 
         socket.on('connect', () => {
             socket.emit('teacher-login', socket.id);
