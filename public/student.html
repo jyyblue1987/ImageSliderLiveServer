@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Image Slider</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/libs/socket.io-2.2.0.js"></script>
 </head>
@@ -41,7 +42,7 @@
         <span class="dot" onclick="currentSlide(3)"></span>
     </div>
     <script>
-        const socket = io('localhost:9001');
+        const socket = io(':9001');
 
         var slideIndex = 1;
         showSlides(slideIndex);
@@ -73,6 +74,10 @@
             console.log(data);
             slideIndex = data.num;
             showSlides(data.num);
+        });
+
+        $(document).ready(function() {
+            //prepareCanvas();
         });
 
     </script>
