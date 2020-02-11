@@ -8,6 +8,13 @@
     margin: auto;
 }
 
+.slideshow-control {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+}
+
+
 /* Hide the images by default */
 .mySlides {
     display: none;
@@ -100,3 +107,30 @@ canvas {
     top: 0;
     left: 0;    
 }
+
+a {
+    cursor: pointer;
+}
+a:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: pink;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: blue;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+  a:active {
+    color: blue;
+    background-color: transparent;
+    text-decoration: underline;
+  }
