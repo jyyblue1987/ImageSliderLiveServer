@@ -13,6 +13,27 @@ router.get('/', function(req, res, next) {
   	res.render('index', { title: 'Express' });
 });
 
+router.get('/teacher', function(req, res, next) {
+    fs.readFile('public/teacher.html', function(err, data) {                
+        var str = data.toString();
+   
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(str);
+        res.end();
+    });
+});
+
+router.get('/student-b', function(req, res, next) {
+    fs.readFile('public/student.html', function(err, data) {                
+        var str = data.toString();
+   
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(str);
+        res.end();
+    });
+});
+
+
 router.get('/student-a', function(req, res, next) {
     fs.readFile('public/student.html', function(err, data) {                
         var str = data.toString();
