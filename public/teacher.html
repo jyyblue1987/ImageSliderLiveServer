@@ -9,7 +9,7 @@
 <body>
     <ul class="demoToolList">        
         <li>
-            <input type="checkbox" name="drawing" value="1">
+            <input id="drawing-mode" type="checkbox" name="drawing" value="1" onclick='onClickDrawing(this);'>
             <span class="highlight">Allow Student Drawing: </span>
         </li>
 
@@ -64,6 +64,8 @@
         var slideIndex = 1;
         showSlides(slideIndex);
 
+        var drawing_flag = true;
+
         // Next/previous controls
         function plusSlides(n) {
             showSlides(slideIndex += n);
@@ -98,6 +100,24 @@
             data.num = n;
             socket.emit('move-slide', data);
         }
+
+        function onClickDrawing(cb) {
+            console.log(cb.checked);
+
+            var data = {};
+            data.id = socket.id;
+            data.drawing_flag = document.getElementById("drawing-mode").checked;
+
+            socket.emit('drawing-flag', data);
+        }
+
+        socket.on('init-state', () => {
+            var data = {};
+            data.id = socket.id;
+            data.drawing_flag = document.getElementById("drawing-mode").checked;
+
+            socket.emit('drawing-flag', data);
+        });      
 
         socket.on('connect', () => {
             socket.emit('teacher-login', socket.id);

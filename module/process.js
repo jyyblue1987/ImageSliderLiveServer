@@ -6,7 +6,8 @@ global.io.sockets.on('connection',function(socket){
     });
     
     socket.on('student-login',function(data){
-        socket.join('student_channel');
+        socket.join('student_channel');        
+        global.io.sockets.in('teacher_channel').emit('init-state', data);
         console.log(data);
     });
 
@@ -20,5 +21,10 @@ global.io.sockets.on('connection',function(socket){
         console.log(data);                
         global.io.sockets.in('teacher_channel').emit('mouse-event', data);
         global.io.sockets.in('student_channel').emit('mouse-event', data);
+    });
+
+    socket.on('drawing-flag', function(data){
+        console.log(data);                        
+        global.io.sockets.in('student_channel').emit('drawing-flag', data);
     });
 })  

@@ -86,6 +86,9 @@ function addClick(x, y, dragging)
 }
 
 $('#canvas').mousedown(function(e){
+    if( drawing_flag == false )
+        return;
+
     var slide_div = document.getElementsByClassName('slideshow-container')[0];
 
     var mouseX = e.pageX - slide_div.offsetLeft;
@@ -106,6 +109,9 @@ $('#canvas').mousedown(function(e){
 });
 
 $('#canvas').mousemove(function(e){
+    if( drawing_flag == false )
+        return;
+
     if(paint){
         var slide_div = document.getElementsByClassName('slideshow-container')[0];
 
@@ -127,6 +133,9 @@ $('#canvas').mousemove(function(e){
 });
 
 $('#canvas').mouseup(function(e){
+    if( drawing_flag == false )
+        return;
+
     paint = false;
 
     var data = {};
@@ -137,6 +146,9 @@ $('#canvas').mouseup(function(e){
 });
 
 $('#canvas').mouseleave(function(e){
+    if( drawing_flag == false )
+        return;
+        
     paint = false;
 
     var data = {};

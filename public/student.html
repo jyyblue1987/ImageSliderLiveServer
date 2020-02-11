@@ -9,6 +9,10 @@
 <body>
     <ul class="demoToolList">        
         <li>
+            <input id="drawing-mode" type="checkbox" name="drawing" value="1" onclick='onClickDrawing(this);' disabled>
+            <span class="highlight">Allow Student Drawing: </span>
+        </li>
+        <li>
             <span class="highlight">Choose a color: </span>
             <button id="choosePurpleSimpleColors" type="button" onclick="onPurple()">Purple</button>
             <button id="chooseGreenSimpleColors" type="button" onclick="onGreen()">Green</button>
@@ -56,6 +60,8 @@
     <script>
     
         var slideIndex = 1;
+        var drawing_flag = false;
+
         showSlides(slideIndex);
 
         function showSlides(n) {
@@ -86,6 +92,13 @@
             console.log(data);
             slideIndex = data.num;
             showSlides(data.num);
+        });
+
+        socket.on('drawing-flag', function(data) {
+            console.log(data);
+            drawing_flag = data.drawing_flag;
+
+            document.getElementById("drawing-mode").checked = drawing_flag;
         });
     </script>
     <script src="js/main.js"></script>
