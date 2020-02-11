@@ -62,7 +62,8 @@
             slides[slideIndex-1].style.display = "block";
             dots[slideIndex-1].className += " active";
 
-            socket.emit('move', n);
+            // clear canvas
+            clearCanvas();
         }
 
         socket.on('connect', () => {
@@ -76,10 +77,144 @@
             showSlides(data.num);
         });
 
-        $(document).ready(function() {
-            //prepareCanvas();
+        socket.on('connect', () => {
+            socket.emit('student-login', socket.id);
+            console.log(socket.id); // 'G5p5...'
         });
 
+        socket.on('mouse-event', function(data) {
+            console.log(data);
+            if( data.id == socket.id )
+                return;
+
+            if( data.mouse_type == 'mousedown')    
+            {
+                paint = true;
+                addClick(data.x, data.y);
+                redraw();
+
+            }
+
+            if( data.mouse_type == 'mousemove')    
+            {
+                paint = true;
+                addClick(data.x, data.y, true);
+                redraw();
+            }
+
+            if( data.mouse_type == 'mouseup')    
+            {
+                paint = false;                
+            }
+
+            if( data.mouse_type == 'mouseleave')    
+            {
+                paint = false;                
+            }
+
+        });
+
+
+        var clickX = new Array();
+        var clickY = new Array();
+        var clickDrag = new Array();
+        var paint;
+        var context;
+        
+        prepareCanvas();
+
+        function prepareCanvas()
+        {
+            var slide_div = document.getElementsByClassName('slideshow-container')[0];
+
+            var canvasWidth = slide_div.offsetWidth;
+            var canvasHeight = slide_div.offsetHeight;
+
+            canvas = document.createElement('canvas');
+            canvas.setAttribute('id', 'canvas');
+            canvas.setAttribute('width', canvasWidth);
+            canvas.setAttribute('height', canvasHeight);            
+            
+            slide_div.appendChild(canvas);
+            if(typeof G_vmlCanvasManager != 'undefined') {
+                canvas = G_vmlCanvasManager.initElement(canvas);
+            }
+
+            context = canvas.getContext("2d");            
+        }
+
+        function clearCanvas()
+        {
+            paint = false;
+            clickX = new Array();
+            clickY = new Array();
+            clickDrag = new Array();
+            redraw();
+        }
+
+        function addClick(x, y, dragging)
+        {
+            clickX.push(x);
+            clickY.push(y);
+            clickDrag.push(dragging);
+        }
+
+        $('#canvas').mousedown(function(e){
+            var slide_div = document.getElementsByClassName('slideshow-container')[0];
+
+            var mouseX = e.pageX - slide_div.offsetLeft;
+            var mouseY = e.pageY - slide_div.offsetTop;
+                    
+            paint = true;
+            addClick(mouseX, mouseY);
+            redraw();
+        });
+
+        $('#canvas').mousemove(function(e){
+            if(paint){
+                var slide_div = document.getElementsByClassName('slideshow-container')[0];
+
+                var mouseX = e.pageX - slide_div.offsetLeft;
+                var mouseY = e.pageY - slide_div.offsetTop;
+
+                addClick(mouseX, mouseY, true);
+                redraw();
+            }
+        });
+
+        $('#canvas').mouseup(function(e){
+            paint = false;
+        });
+
+        $('#canvas').mouseleave(function(e){
+            paint = false;
+        });
+
+        function redraw(){
+            if( !context )
+                return;
+
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
+            
+            context.strokeStyle = "#df4b26";
+            context.lineJoin = "round";
+            context.lineWidth = 5;
+                        
+            for(var i=0; i < clickX.length; i++) {		
+                context.beginPath();
+                if(clickDrag[i] && i){
+                    context.moveTo(clickX[i-1], clickY[i-1]);
+                }else{
+                    context.moveTo(clickX[i]-1, clickY[i]);
+                }
+                context.lineTo(clickX[i], clickY[i]);
+                context.closePath();
+                context.stroke();
+            }
+        }
+
+
+       
     </script>
 </body>
 </html>
