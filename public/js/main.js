@@ -53,7 +53,15 @@ function onBrown()
     curColor = colorBrown;
 }
 
+function onClear()
+{
+    clearCanvas();
 
+    var data = {};
+    data.id = socket.id;
+    
+    socket.emit('clear-canvas', data);
+}
 
 prepareCanvas();
 
@@ -148,7 +156,7 @@ $('#canvas').mouseup(function(e){
 $('#canvas').mouseleave(function(e){
     if( drawing_flag == false )
         return;
-        
+
     paint = false;
 
     var data = {};

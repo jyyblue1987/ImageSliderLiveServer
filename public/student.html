@@ -100,6 +100,11 @@
 
             document.getElementById("drawing-mode").checked = drawing_flag;
         });
+
+        socket.on('clear-canvas', function(data) {
+            console.log(data);
+            clearCanvas();
+        });
     </script>
     <script src="js/main.js"></script>
 

@@ -23,6 +23,11 @@ global.io.sockets.on('connection',function(socket){
         global.io.sockets.in('student_channel').emit('mouse-event', data);
     });
 
+    socket.on('clear-canvas', function(data){
+        console.log(data);                        
+        global.io.sockets.in('student_channel').emit('clear-canvas', data);
+    });
+
     socket.on('drawing-flag', function(data){
         console.log(data);                        
         global.io.sockets.in('student_channel').emit('drawing-flag', data);

@@ -19,6 +19,9 @@
             <button id="chooseGreenSimpleColors" type="button" onclick="onGreen()">Green</button>
             <button id="chooseYellowSimpleColors" type="button" onclick="onYellow()">Yellow</button>
             <button id="chooseBrownSimpleColors" type="button" onclick="onBrown()">Brown</button>
+
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="chooseBrownSimpleColors" type="button" onclick="onClear()">Clear</button>
         </li>
     </ul>
     <!-- Slideshow container -->
@@ -110,6 +113,8 @@
 
             socket.emit('drawing-flag', data);
         }
+        
+        
 
         socket.on('init-state', () => {
             var data = {};
