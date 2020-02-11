@@ -3,6 +3,7 @@
 <head>
     <title>Image Slider</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/libs/socket.io-2.2.0.js"></script>
 </head>
 <body>
     <!-- Slideshow container -->
@@ -40,6 +41,8 @@
         <span class="dot" onclick="currentSlide(3)"></span>
     </div>
     <script>
+        const socket = io('localhost:9001');
+
         var slideIndex = 1;
         showSlides(slideIndex);
 
@@ -67,7 +70,18 @@
             }
             slides[slideIndex-1].style.display = "block";
             dots[slideIndex-1].className += " active";
+
+            var data = {};
+            data.id = socket.id;
+            data.num = n;
+            socket.emit('move-slide', data);
         }
+
+        socket.on('connect', () => {
+            socket.emit('teacher-login', socket.id);
+            console.log(socket.id); // 'G5p5...'
+        });
+
     </script>
 </body>
 </html>
