@@ -115,17 +115,24 @@
         }
 
         $('#canvas').mousedown(function(e){
-            var mouseX = e.pageX - this.offsetLeft;
-            var mouseY = e.pageY - this.offsetTop;
+            var slide_div = document.getElementsByClassName('slideshow-container')[0];
+
+            var mouseX = e.pageX - slide_div.offsetLeft;
+            var mouseY = e.pageY - slide_div.offsetTop;
                     
             paint = true;
-            addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
+            addClick(mouseX, mouseY);
             redraw();
         });
 
         $('#canvas').mousemove(function(e){
             if(paint){
-                addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
+                var slide_div = document.getElementsByClassName('slideshow-container')[0];
+
+                var mouseX = e.pageX - slide_div.offsetLeft;
+                var mouseY = e.pageY - slide_div.offsetTop;
+
+                addClick(mouseX, mouseY, true);
                 redraw();
             }
         });
