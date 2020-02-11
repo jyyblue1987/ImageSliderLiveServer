@@ -7,6 +7,16 @@
     <script src="js/libs/socket.io-2.2.0.js"></script>
 </head>
 <body>
+    <ul class="demoToolList">        
+        <li>
+            <span class="highlight">Choose a color: </span>
+            <button id="choosePurpleSimpleColors" type="button" onclick="onPurple()">Purple</button>
+            <button id="chooseGreenSimpleColors" type="button" onclick="onGreen()">Green</button>
+            <button id="chooseYellowSimpleColors" type="button" onclick="onYellow()">Yellow</button>
+            <button id="chooseBrownSimpleColors" type="button" onclick="onBrown()">Brown</button>
+        </li>
+    </ul>
+
     <!-- Slideshow container -->
     <div class="slideshow-container">
 
@@ -90,6 +100,7 @@
             if( data.mouse_type == 'mousedown')    
             {
                 paint = true;
+                curColor = data.color;
                 addClick(data.x, data.y);
                 redraw();
 
@@ -98,6 +109,7 @@
             if( data.mouse_type == 'mousemove')    
             {
                 paint = true;
+                curColor = data.color;
                 addClick(data.x, data.y, true);
                 redraw();
             }
@@ -114,6 +126,34 @@
 
         });
 
+
+        function onPurple() 
+        {
+            curColor = colorPurple;
+        }
+
+        function onGreen() 
+        {
+            curColor = colorGreen;
+        }
+
+        function onYellow() 
+        {
+            curColor = colorYellow;
+        }
+
+        function onBrown() 
+        {
+            curColor = colorBrown;
+        }
+
+        var colorPurple = "#cb3594";
+        var colorGreen = "#659b41";
+        var colorYellow = "#ffcf33";
+        var colorBrown = "#986928";
+
+        var curColor = colorPurple;
+        var clickColor = new Array();
 
         var clickX = new Array();
         var clickY = new Array();
@@ -149,6 +189,7 @@
             clickX = new Array();
             clickY = new Array();
             clickDrag = new Array();
+            clickColor = new Array();
             redraw();
         }
 
@@ -157,6 +198,7 @@
             clickX.push(x);
             clickY.push(y);
             clickDrag.push(dragging);
+            clickColor.push(curColor);
         }
 
         $('#canvas').mousedown(function(e){
@@ -168,6 +210,15 @@
             paint = true;
             addClick(mouseX, mouseY);
             redraw();
+
+            var data = {};
+            data.id = socket.id;
+            data.mouse_type = 'mousedown';
+            data.x = mouseX;
+            data.y = mouseY;
+            data.color = curColor;
+
+            socket.emit('mouse-event', data);
         });
 
         $('#canvas').mousemove(function(e){
@@ -179,15 +230,36 @@
 
                 addClick(mouseX, mouseY, true);
                 redraw();
+
+                 var data = {};
+                data.id = socket.id;
+                data.mouse_type = 'mousemove';
+                data.x = mouseX;
+                data.y = mouseY;
+                data.color = curColor;
+
+                socket.emit('mouse-event', data);
             }
         });
 
         $('#canvas').mouseup(function(e){
             paint = false;
+
+            var data = {};
+            data.id = socket.id;
+            data.mouse_type = 'mouseup';
+
+            socket.emit('mouse-event', data);
         });
 
         $('#canvas').mouseleave(function(e){
             paint = false;
+
+            var data = {};
+            data.id = socket.id;
+            data.mouse_type = 'mouseleave';
+            
+            socket.emit('mouse-event', data);
         });
 
         function redraw(){
@@ -209,6 +281,7 @@
                 }
                 context.lineTo(clickX[i], clickY[i]);
                 context.closePath();
+                context.strokeStyle = clickColor[i];
                 context.stroke();
             }
         }
